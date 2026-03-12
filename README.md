@@ -417,32 +417,7 @@ sekolah-api-Local/
 └── README.md                # This file
 ```
 
-## Contributing
-
-Kontribusi sangat diterima! Silakan:
-1. Fork repository ini
-2. Buat branch fitur baru (`git checkout -b feature/AmazingFeature`)
-3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
-4. Push ke branch (`git push origin feature/AmazingFeature`)
-5. Buat Pull Request
-
-## Security
-
-Jika Anda menemukan celah keamanan, mohon laporkan via email atau buat issue secara private.
-
-## Support
-
-Jika ada pertanyaan atau masalah:
-- Buat issue di repository ini
-- Baca dokumentasi lengkap di folder docs
-- Hubungi maintainer
-
 ## License
 
 This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
----
-
-**Happy Coding!**
-
-Made with Laravel
