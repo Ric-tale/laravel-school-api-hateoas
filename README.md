@@ -1,1 +1,2 @@
-# laravel-school-api-hateoasREST API Manajemen Sekolah berbasis Laravel dengan implementasi Collection+JSON. Mengelola data guru, siswa, kelas, mata pelajaran, dan jadwal menggunakan standar REST collection. Fitur utama meliputi format Collection+JSON, dukungan hypermedia (HATEOAS), operasi CRUD, template dokumentasi API otomatis, serta query template untuk pencarian data.
+# laravel-school-api-hateoas
+REST API Manajemen Sekolah berbasis Laravel dengan implementasi Collection+JSON. Mengelola data guru, siswa, kelas, mata pelajaran, dan jadwal menggunakan standar REST collection. Fitur utama meliputi format Collection+JSON, dukungan hypermedia (HATEOAS), operasi CRUD, template dokumentasi API otomatis, serta query template untuk pencarian data.
