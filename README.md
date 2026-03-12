@@ -54,20 +54,66 @@ Tabel inti yang menghubungkan kelas, mapel, dan guru.
 - `jadwal.mapel_id → mapel.id`
 - `jadwal.guru_id → guru.id`
 
+## Prerequisites
+
+Pastikan Anda sudah menginstall:
+- **PHP >= 8.2**
+- **Composer**
+- **MySQL/MariaDB** (version 5.7+)
+- **Git** (untuk clone repository)
+- **Node.js & npm** (optional, untuk compile frontend assets)
+- **Postman/Insomnia** (optional, untuk testing API)
+
+### Cek Versi
+```bash
+# Cek PHP
+php -v
+
+# Cek Composer
+composer --version
+
+# Cek MySQL
+mysql --version
+```
+
 ## Instalasi & Setup
 
-### 1. Install Dependencies
+### 1. Clone Repository
+```bash
+git clone <repository-url>
+cd sekolah-api-Local
+```
+
+### 2. Install Dependencies
+
+**Install PHP Dependencies:**
 ```bash
 composer install
 ```
 
-### 2. Konfigurasi Environment
+**Install Node Dependencies (Optional):**
+```bash
+npm install
+```
+
+### 3. Konfigurasi Environment
+
+**Windows:**
+```bash
+copy .env.example .env
+```
+
+**Linux/macOS:**
 ```bash
 cp .env.example .env
+```
+
+**Generate Application Key:**
+```bash
 php artisan key:generate
 ```
 
-### 3. Konfigurasi Database
+### 4. Konfigurasi Database
 Edit file `.env` dan sesuaikan dengan database Anda:
 ```env
 DB_CONNECTION=mysql
@@ -75,20 +121,82 @@ DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=sekolah_api
 DB_USERNAME=root
-DB_PASSWORD=
+DB_PASSWORD=your_password
 ```
 
-### 4. Migrasi & Seeding Database
+**Penting:** Ganti `your_password` dengan password MySQL Anda.
+
+### 5. Buat Database
+
+Sebelum migrasi, buat database terlebih dahulu:
+
+**Via MySQL Command Line:**
+```bash
+mysql -u root -p -e "CREATE DATABASE sekolah_api;"
+```
+
+**Via phpMyAdmin:**
+1. Buka phpMyAdmin di browser
+2. Klik tab "Database" atau "New"
+3. Masukkan nama database: `sekolah_api`
+4. Klik "Create"
+
+**Via MySQL Workbench:**
+1. Buka MySQL Workbench
+2. Connect ke server
+3. Run SQL: `CREATE DATABASE sekolah_api;`
+
+### 6. Migrasi & Seeding Database
 ```bash
 php artisan migrate:fresh --seed
 ```
 
-### 5. Jalankan Server
+Output yang diharapkan:
+```
+INFO  Preparing database.
+INFO  Running migrations.
+INFO  Running seeders.
+  Database\Seeders\DatabaseSeeder ................... DONE
+```
+
+### 7. Jalankan Development Server
 ```bash
 php artisan serve
 ```
 
-API akan berjalan di `http://localhost:8000`
+Server akan berjalan di: **http://localhost:8000**
+
+### 8. Test Instalasi
+
+Verifikasi instalasi berhasil dengan mengakses endpoint:
+
+**Via Browser:**
+```
+http://localhost:8000/api/guru
+```
+
+**Via curl:**
+```bash
+curl http://localhost:8000/api/guru
+```
+
+**Via PowerShell:**
+```powershell
+Invoke-RestMethod -Uri http://localhost:8000/api/guru
+```
+
+Jika berhasil, Anda akan melihat response JSON dengan daftar guru.
+
+### 9. Compile Frontend Assets (Optional)
+
+Jika ingin menggunakan Vite untuk compile assets:
+```bash
+# Development mode
+npm run dev
+
+# Production build
+npm run build
+```
 
 ## Default User Accounts
 
@@ -185,7 +293,98 @@ Anda dapat menggunakan tools berikut untuk testing:
 - **Postman** - Import collection dari dokumentasi
 - **curl** - Command line testing
 - **Insomnia** - REST client
+- **PowerShell** - `Invoke-RestMethod` untuk Windows
 - Browser - Untuk GET requests
+
+## Troubleshooting
+
+### Error: SQLSTATE[HY000] [1049] Unknown database 'sekolah_api'
+
+**Penyebab:** Database belum dibuat.
+
+**Solusi:**
+```bash
+mysql -u root -p -e "CREATE DATABASE sekolah_api;"
+```
+
+### Error: SQLSTATE[HY000] [2002] Connection refused
+
+**Penyebab:** MySQL service belum running.
+
+**Solusi:**
+
+**Windows:**
+```bash
+net start mysql
+# atau
+net start mysql80
+```
+
+**Linux:**
+```bash
+sudo service mysql start
+# atau
+sudo systemctl start mysql
+```
+
+**macOS:**
+```bash
+brew services start mysql
+```
+
+### Error: Class "Composer\..." not found
+
+**Penyebab:** Dependencies belum terinstall.
+
+**Solusi:**
+```bash
+composer install
+```
+
+### Error: No application encryption key has been specified
+
+**Penyebab:** Application key belum digenerate.
+
+**Solusi:**
+```bash
+php artisan key:generate
+```
+
+### Error: SQLSTATE[HY000] [1045] Access denied for user 'root'@'localhost'
+
+**Penyebab:** Password MySQL salah di file `.env`.
+
+**Solusi:**
+1. Periksa password MySQL Anda
+2. Edit file `.env` dan sesuaikan `DB_PASSWORD`
+3. Jika MySQL tanpa password, kosongkan: `DB_PASSWORD=`
+
+### Error: Table 'sekolah_api.users' doesn't exist
+
+**Penyebab:** Migrasi belum dijalankan.
+
+**Solusi:**
+```bash
+php artisan migrate:fresh --seed
+```
+
+### Reset Database
+
+Jika ingin reset database dan mulai dari awal:
+```bash
+php artisan migrate:fresh --seed
+```
+
+**WARNING:** Perintah ini akan **menghapus semua data**!
+
+## Dokumentasi Lainnya
+
+- **[QUICK_START.md](QUICK_START.md)** - Panduan cepat setup dalam 5 menit
+- **[DATABASE_SCHEMA.md](DATABASE_SCHEMA.md)** - Struktur database detail & ERD
+- **[COLLECTION_JSON_DOCUMENTATION.md](COLLECTION_JSON_DOCUMENTATION.md)** - Format API lengkap
+- **[COLLECTION_JSON_EXAMPLES.md](COLLECTION_JSON_EXAMPLES.md)** - Contoh request & response
+- **[COLLECTION_JSON_HATEOAS.md](COLLECTION_JSON_HATEOAS.md)** - HATEOAS implementation
+- **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** - Ringkasan implementasi
 
 ## Dokumentasi Format
 
@@ -197,7 +396,46 @@ Anda dapat menggunakan tools berikut untuk testing:
 
 - **Laravel 11** - PHP Framework
 - **MySQL** - Database
-- **Collection+JSON** - API Format
+- **Collection+JSON** - API Media Type Format
+- **PHP 8.2+** - Programming Language
+- **Composer** - Dependency Manager
+
+## Project Structure
+
+```
+sekolah-api-Local/
+├── app/
+│   ├── Http/Controllers/    # API Controllers
+│   ├── Models/              # Eloquent Models
+│   └── Traits/              # Reusable Traits
+├── database/
+│   ├── migrations/          # Database migrations
+│   └── seeders/             # Database seeders
+├── routes/
+│   └── api.php              # API routes definition
+├── .env.example             # Environment template
+└── README.md                # This file
+```
+
+## Contributing
+
+Kontribusi sangat diterima! Silakan:
+1. Fork repository ini
+2. Buat branch fitur baru (`git checkout -b feature/AmazingFeature`)
+3. Commit perubahan (`git commit -m 'Add some AmazingFeature'`)
+4. Push ke branch (`git push origin feature/AmazingFeature`)
+5. Buat Pull Request
+
+## Security
+
+Jika Anda menemukan celah keamanan, mohon laporkan via email atau buat issue secara private.
+
+## Support
+
+Jika ada pertanyaan atau masalah:
+- Buat issue di repository ini
+- Baca dokumentasi lengkap di folder docs
+- Hubungi maintainer
 
 ## License
 
@@ -205,21 +443,6 @@ This project is open-sourced software licensed under the [MIT license](https://o
 
 ---
 
-📚 **Dokumentasi Database Lengkap**
+**Happy Coding!**
 
-Lihat dokumentasi lengkap struktur database dan relasi di file dokumentasi Anda.
-
-🔧 **Support**
-
-Jika ada pertanyaan atau masalah, silakan buat issue di repository ini.
-
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Made with Laravel
