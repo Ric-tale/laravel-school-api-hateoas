@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\GuruController;
 use App\Http\Controllers\Api\KelasController;
@@ -8,9 +9,22 @@ use App\Http\Controllers\Api\MapelController;
 use App\Http\Controllers\Api\SiswaController;
 use App\Http\Controllers\Api\JadwalController;
 
-Route::apiResource('/user', App\Http\Controllers\Api\UserController::class);
-Route::apiResource('/guru', App\Http\Controllers\Api\GuruController::class);
-Route::apiResource('/mapel', App\Http\Controllers\Api\MapelController::class);
-Route::apiResource('/kelas', App\Http\Controllers\Api\KelasController::class);
-Route::apiResource('/siswa', App\Http\Controllers\Api\SiswaController::class);
-Route::apiResource('/jadwal', App\Http\Controllers\Api\JadwalController::class);
+// Auth Routes (PUBLIC - tidak perlu token)
+Route::post('/login', [AuthController::class, 'login']);
+
+// Protected Routes (memerlukan JWT token)
+Route::middleware('jwt.verify')->group(function () {
+    // Auth endpoints
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/refresh', [AuthController::class, 'refresh']);
+
+    // Resource API endpoints (GET/POST/PUT/DELETE)
+    Route::apiResource('/user', UserController::class);
+    Route::apiResource('/guru', GuruController::class);
+    Route::apiResource('/mapel', MapelController::class);
+    Route::apiResource('/kelas', KelasController::class);
+    Route::apiResource('/siswa', SiswaController::class);
+    Route::apiResource('/jadwal', JadwalController::class);
+});
+
